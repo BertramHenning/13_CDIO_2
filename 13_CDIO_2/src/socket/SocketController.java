@@ -82,13 +82,18 @@ public class SocketController implements ISocketController {
 					notifyObservers(new SocketInMessage(SocketMessageType.D, inLine.split(" ")[1])); 			
 					break;
 				case "DW": //Clear primary display
+
 					notifyObservers(new SocketInMessage(SocketMessageType.DW, " "));
+
+
 					break;
 				case "P111": //Show something in secondary display
 					notifyObservers(new SocketInMessage(SocketMessageType.P111, ""));
 					break;
 				case "T": // Tare the weight
+
 					notifyObservers(new SocketInMessage(SocketMessageType.T, ""));
+
 					break;
 				case "S": // Request the current load
 					notifyObservers(new SocketInMessage(SocketMessageType.S, ""));
@@ -102,7 +107,9 @@ public class SocketController implements ISocketController {
 					notifyObservers(new SocketInMessage(SocketMessageType.B, inLine.split(" ")[1]));
 					break;
 				case "Q": // Quit
+
 					notifyObservers(new SocketInMessage(SocketMessageType.Q, "Shutting down..."));
+
 					break;
 				default: //Something went wrong?
 					break;
