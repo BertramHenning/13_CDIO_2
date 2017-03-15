@@ -106,7 +106,7 @@ public class MainController implements IMainController, ISocketObserver, IWeight
 			break;
 		case ZERO:
 			break;
-		case C:
+		case CANCEL:
 			break;
 		case EXIT:
 			break;
