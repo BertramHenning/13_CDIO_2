@@ -29,12 +29,12 @@ public class MainController implements IMainController, ISocketObserver, IWeight
 	@Override
 	public void init(ISocketController socketHandler, IWeightInterfaceController weightInterfaceController) {
 		this.socketHandler = socketHandler;
-		this.weightController=weightInterfaceController;
+		this.weightController = weightInterfaceController;
 	}
 
 	@Override
 	public void start() {
-		if (socketHandler!=null && weightController!=null){
+		if (socketHandler != null && weightController != null){
 			//Makes this controller interested in messages from the socket
 			socketHandler.registerObserver(this);
 			//Starts socketHandler in own thread
@@ -54,6 +54,17 @@ public class MainController implements IMainController, ISocketObserver, IWeight
 	public void notify(SocketInMessage message) {
 		switch (message.getType()) {
 		case B:
+			
+				//Checking if command is valid.
+				if (checkDouble(message.getMessage())){
+					//Changing weight's screen to match new value.
+					weightController.showMessagePrimaryDisplay(message.getMessage());
+					this.notifyWeightChange(Double.parseDouble(message.getMessage()));
+					
+				} else{
+					// If command is not a double value ES will be returned.
+					socketHandler.sendMessage(new SocketOutMessage("ES"));
+			}
 			
 			break;
 		case D:			
@@ -110,8 +121,10 @@ public class MainController implements IMainController, ISocketObserver, IWeight
 			System.out.println(keyPress.getCharacter() + " +- " + keyPress.getKeyNumber());
 			break;
 		case TARA:
+			System.out.println(keyPress.getCharacter() + " +- " + keyPress.getKeyNumber());
 			break;
 		case TEXT:
+			System.out.println(keyPress.getCharacter() + " +- " + keyPress.getKeyNumber());
 			break;
 		case ZERO:
 			break;
@@ -139,6 +152,7 @@ public class MainController implements IMainController, ISocketObserver, IWeight
 			Double.parseDouble(str);
 			return true;
 		}catch (NumberFormatException e){
+			socketHandler.sendMessage(new SocketOutMessage("Could not parse Double"));
 			return false;
 		}
 	}

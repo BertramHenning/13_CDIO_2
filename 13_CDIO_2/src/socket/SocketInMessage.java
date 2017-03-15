@@ -5,8 +5,8 @@ public class SocketInMessage {
 	private String message;
 
 	public SocketInMessage(SocketMessageType type, String message) {
-		this.message=message;
-		this.type=type;
+		this.message = message;
+		this.type = type;
 	}
 	
 	public String getMessage() {
