@@ -18,6 +18,7 @@ public class MainController implements IMainController, ISocketObserver, IWeight
 	private ISocketController socketHandler;
 	private IWeightInterfaceController weightController;
 	private KeyState keyState = KeyState.K1;
+	private Double Weight;
 
 	public MainController(ISocketController socketHandler, IWeightInterfaceController weightInterfaceController) {
 		this.init(socketHandler, weightInterfaceController);
@@ -51,8 +52,9 @@ public class MainController implements IMainController, ISocketObserver, IWeight
 	public void notify(SocketInMessage message) {
 		switch (message.getType()) {
 		case B:
+			
 			break;
-		case D:
+		case D:			
 			weightController.showMessagePrimaryDisplay(message.getMessage()); 
 			break;
 		case Q:
@@ -101,6 +103,7 @@ public class MainController implements IMainController, ISocketObserver, IWeight
 		//TODO implement logic for handling input from ui
 		switch (keyPress.getType()) {
 		case SOFTBUTTON:
+			System.out.println(keyPress.getCharacter() + " +- " + keyPress.getKeyNumber());
 			break;
 		case TARA:
 			break;
@@ -124,7 +127,16 @@ public class MainController implements IMainController, ISocketObserver, IWeight
 	@Override
 	public void notifyWeightChange(double newWeight) {
 		// TODO Auto-generated method stub
-
+		Weight = newWeight;
+	}
+	
+	public boolean checkDouble(String str){
+		try{
+			Double.parseDouble(str);
+			return true;
+		}catch (NumberFormatException e){
+			return false;
+		}
 	}
 
 }
