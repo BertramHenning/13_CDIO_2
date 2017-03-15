@@ -9,7 +9,9 @@ import java.net.Socket;
 import java.util.HashSet;
 import java.util.Set;
 
+import controller.MainController;
 import socket.SocketInMessage.SocketMessageType;
+
 
 public class SocketController implements ISocketController {
 	Set<ISocketObserver> observers = new HashSet<ISocketObserver>();
@@ -30,10 +32,15 @@ public class SocketController implements ISocketController {
 
 	@Override
 	public void sendMessage(SocketOutMessage message) {
-		if (outStream!=null){
-			//TODO send something over the socket! 
+		if (outStream != null){
+			try {
+				outStream.writeBytes(message.getMessage());
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
 		} else {
-			//TODO maybe tell someone that connection is closed?
+			System.out.println("Connection is closed. Message Not sent.");
 		}
 	}
 
@@ -46,6 +53,7 @@ public class SocketController implements ISocketController {
 			}		
 		} catch (IOException e1) {
 			// TODO Maybe notify MainController?
+			MainController.class.notify();
 			e1.printStackTrace();
 		} 
 
@@ -74,16 +82,16 @@ public class SocketController implements ISocketController {
 					notifyObservers(new SocketInMessage(SocketMessageType.D, inLine.split(" ")[1])); 			
 					break;
 				case "DW": //Clear primary display
-					//TODO implement
+					notifyObservers(new SocketInMessage(SocketMessageType.DW, " "));
 					break;
 				case "P111": //Show something in secondary display
-					//TODO implement
+					notifyObservers(new SocketInMessage(SocketMessageType.P111, ""));
 					break;
 				case "T": // Tare the weight
-					//TODO implement
+					notifyObservers(new SocketInMessage(SocketMessageType.T, ""));
 					break;
 				case "S": // Request the current load
-					//TODO implement
+					notifyObservers(new SocketInMessage(SocketMessageType.S, ""));
 					break;
 				case "K":
 					if (inLine.split(" ").length>1){
@@ -91,13 +99,12 @@ public class SocketController implements ISocketController {
 					}
 					break;
 				case "B": // Set the load
-					//TODO implement
+					notifyObservers(new SocketInMessage(SocketMessageType.B, inLine.split(" ")[1]));
 					break;
 				case "Q": // Quit
-					//TODO implement
+					notifyObservers(new SocketInMessage(SocketMessageType.Q, "Shutting down..."));
 					break;
 				default: //Something went wrong?
-					//TODO implement
 					break;
 				}
 			}
