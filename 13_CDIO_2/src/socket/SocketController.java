@@ -92,7 +92,7 @@ public class SocketController implements ISocketController {
 					break;
 				case "T": // Tare the weight
 
-					notifyObservers(new SocketInMessage(SocketMessageType.T, ""));
+					notifyObservers(new SocketInMessage(SocketMessageType.T, inLine.split(" ")[0]));
 
 					break;
 				case "S": // Request the current load

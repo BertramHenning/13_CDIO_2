@@ -2,6 +2,8 @@ package controller;
 
 import org.omg.Messaging.SyncScopeHelper;
 
+import com.sun.xml.internal.ws.resources.SenderMessages;
+
 import socket.ISocketController;
 import socket.ISocketObserver;
 import socket.SocketInMessage;
@@ -20,7 +22,9 @@ public class MainController implements IMainController, ISocketObserver, IWeight
 	private ISocketController socketHandler;
 	private IWeightInterfaceController weightController;
 	private KeyState keyState = KeyState.K1;
-	private Double Weight = 0.000;
+	private Double weight = 3.0;
+	private Double tara;
+	private Double totalWeight = 0.0;
 
 	public MainController(ISocketController socketHandler, IWeightInterfaceController weightInterfaceController) {
 		this.init(socketHandler, weightInterfaceController);
@@ -80,9 +84,16 @@ public class MainController implements IMainController, ISocketObserver, IWeight
 		case S:
 			break;
 		case T:
+			tara = weight;
+			weight = 0.0;
+			weightController.showMessagePrimaryDisplay(weight + " kg");
+			
+			totalWeight = totalWeight + tara;
+			
+			socketHandler.sendMessage(new SocketOutMessage("T = " + tara + ". Total Weight " + totalWeight + "\r\n"));
 			break;
 		case DW:
-			weightController.showMessagePrimaryDisplay(Weight + " kg"); 
+			weightController.showMessagePrimaryDisplay(weight + " kg"); 
 			break;
 		case K:
 			handleKMessage(message);
@@ -144,7 +155,7 @@ public class MainController implements IMainController, ISocketObserver, IWeight
 	@Override
 	public void notifyWeightChange(double newWeight) {
 		// TODO Auto-generated method stub
-		Weight = newWeight;
+		weight = newWeight;
 	}
 	
 	public boolean checkDouble(String str){
