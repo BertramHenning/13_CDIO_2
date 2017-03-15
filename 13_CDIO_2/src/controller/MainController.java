@@ -20,7 +20,7 @@ public class MainController implements IMainController, ISocketObserver, IWeight
 	private ISocketController socketHandler;
 	private IWeightInterfaceController weightController;
 	private KeyState keyState = KeyState.K1;
-	private Double Weight;
+	private Double Weight = 0.000;
 
 	public MainController(ISocketController socketHandler, IWeightInterfaceController weightInterfaceController) {
 		this.init(socketHandler, weightInterfaceController);
@@ -71,7 +71,7 @@ public class MainController implements IMainController, ISocketObserver, IWeight
 		case T:
 			break;
 		case DW:
-			weightController.showMessagePrimaryDisplay(message.getMessage()); 
+			weightController.showMessagePrimaryDisplay(Weight + " kg"); 
 			break;
 		case K:
 			handleKMessage(message);
