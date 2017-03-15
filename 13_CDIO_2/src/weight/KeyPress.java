@@ -26,10 +26,6 @@ public class KeyPress {
 		return new KeyPress(0,'\\', KeyPressType.SEND);
 	}
 	
-	public static KeyPress Cancel(){
-		return new KeyPress(0, '\\', KeyPressType.CANCEL);
-	}
-	
 	public static KeyPress SoftButton(int number){
 		return new KeyPress(number, '\\', KeyPressType.SOFTBUTTON);
 	}
@@ -55,6 +51,6 @@ public class KeyPress {
 	}
 	
 	public enum KeyPressType{
-		SOFTBUTTON, TEXT, EXIT, ZERO, TARA, SEND, CANCEL	
+		SOFTBUTTON, TEXT, EXIT, ZERO, TARA, SEND, C	
 	}
 }

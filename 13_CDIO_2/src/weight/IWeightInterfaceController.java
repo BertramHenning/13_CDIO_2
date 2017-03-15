@@ -7,7 +7,6 @@ public interface IWeightInterfaceController extends Runnable {
 	
 	void showMessagePrimaryDisplay(String string);
 	void showMessageSecondaryDisplay(String string);
-	void showMessageTernaryDisplay(String string);
 	void changeInputType(InputType type);
 	void setSoftButtonTexts(String[] texts);
 	

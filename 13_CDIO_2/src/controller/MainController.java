@@ -37,7 +37,9 @@ public class MainController implements IMainController, ISocketObserver, IWeight
 			//Starts socketHandler in own thread
 			new Thread(socketHandler).start();
 			//TODO set up weightController - Look above for inspiration (Keep it simple ;))
-
+			weightController.registerObserver(this);
+			new Thread(weightController).start();
+			
 
 		} else {
 			System.err.println("No controllers injected!");
@@ -106,7 +108,7 @@ public class MainController implements IMainController, ISocketObserver, IWeight
 			break;
 		case ZERO:
 			break;
-		case CANCEL:
+		case C:
 			break;
 		case EXIT:
 			break;

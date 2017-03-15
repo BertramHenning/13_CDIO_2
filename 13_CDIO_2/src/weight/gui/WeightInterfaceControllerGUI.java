@@ -37,10 +37,6 @@ public class WeightInterfaceControllerGUI implements IWeightInterfaceController 
 		fxApp.printBottom(string);
 	}
 	@Override
-	public void showMessageTernaryDisplay(String string) {
-		fxApp.printText3(string);
-	}
-	@Override
 	public void changeInputType(InputType type) {
 		switch(type){
 		case LOWER: fxApp.setButtonsLower(); break;
@@ -82,23 +78,19 @@ public class WeightInterfaceControllerGUI implements IWeightInterfaceController 
 		for (IWeightInterfaceObserver o : observers) {
 			o.notifyKeyPress(KeyPress.Tara());
 		}
+		
 	}
 	void onSendButtonPressed() {
 		for (IWeightInterfaceObserver o : observers) {
 			o.notifyKeyPress(KeyPress.Send());
 		}
 	}
-	public void onNumButtonPressed(char btn){
+	public void onNumBtnPressed(char btn){
 		for (IWeightInterfaceObserver o : observers) {
 			o.notifyKeyPress(KeyPress.Character(btn));
 		}
 	}
-	public void onCancelButtonPressed(){
-		for (IWeightInterfaceObserver o : observers) {
-			o.notifyKeyPress(KeyPress.Cancel());
-		}
-	}
-	public void onSoftButtonPressed(int i) {
+	public void onSoftBtnPressed(int i) {
 		for (IWeightInterfaceObserver o : observers) {
 			o.notifyKeyPress(KeyPress.SoftButton(i));
 		}
