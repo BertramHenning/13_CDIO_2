@@ -75,6 +75,7 @@ public class SocketController implements ISocketController {
 					break;
 				case "DW": //Clear primary display
 					//TODO implement
+					notifyObservers(new SocketInMessage(SocketMessageType.DW, ""));
 					break;
 				case "P111": //Show something in secondary display
 					//TODO implement
@@ -94,7 +95,7 @@ public class SocketController implements ISocketController {
 					//TODO implement
 					break;
 				case "Q": // Quit
-					//TODO implement
+					notifyObservers(new SocketInMessage(SocketMessageType.Q, "")); 
 					break;
 				default: //Something went wrong?
 					//TODO implement
