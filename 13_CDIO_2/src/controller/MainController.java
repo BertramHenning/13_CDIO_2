@@ -1,5 +1,7 @@
 package controller;
 
+import org.omg.Messaging.SyncScopeHelper;
+
 import socket.ISocketController;
 import socket.ISocketObserver;
 import socket.SocketInMessage;
@@ -58,6 +60,7 @@ public class MainController implements IMainController, ISocketObserver, IWeight
 			weightController.showMessagePrimaryDisplay(message.getMessage()); 
 			break;
 		case Q:
+			System.exit(0);
 			break;
 		case RM204:
 			break;
@@ -68,6 +71,7 @@ public class MainController implements IMainController, ISocketObserver, IWeight
 		case T:
 			break;
 		case DW:
+			weightController.showMessagePrimaryDisplay(message.getMessage()); 
 			break;
 		case K:
 			handleKMessage(message);
