@@ -111,7 +111,8 @@ public class SocketController implements ISocketController {
 					notifyObservers(new SocketInMessage(SocketMessageType.Q, "Shutting down..."));
 
 					break;
-				default: //Something went wrong?
+				default:
+					notifyObservers(new SocketInMessage(SocketMessageType.def, ""));
 					break;
 				}
 			}
