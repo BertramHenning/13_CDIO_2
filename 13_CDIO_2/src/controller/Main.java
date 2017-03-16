@@ -10,9 +10,17 @@ import socket.ISocketController;
  *
  */
 public class Main {
-	private static boolean gui= true;
-
+	private static boolean gui = true;
+	private static int arg;
+	
 	public static void main(String[] args) {
+		
+		//If port needs to be changed from 8000
+		if(args[0] != null){
+			arg = Integer.parseInt(args[0]);
+			SocketController.changePort(arg);
+		}
+		
 		ISocketController socketHandler = new SocketController();
 		IWeightInterfaceController weightController = new WeightInterfaceControllerGUI();
 		//Injecting socket and uiController into mainController - Replace with improved versions...

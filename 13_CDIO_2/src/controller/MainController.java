@@ -1,6 +1,6 @@
 package controller;
 
-import org.omg.Messaging.SyncScopeHelper;
+//import org.omg.Messaging.SyncScopeHelper;
 
 import socket.ISocketController;
 import socket.ISocketObserver;
@@ -55,7 +55,7 @@ public class MainController implements IMainController, ISocketObserver, IWeight
 		switch (message.getType()) {
 		case B:
 			//Checking if command is valid.
-			if (checkDouble(message.getMessage())){
+			if (checkDouble(message.getMessage() )){
 				//Changing weight's screen to match new value.
 				weightController.showMessagePrimaryDisplay(message.getMessage());
 				this.notifyWeightChange(Double.parseDouble(message.getMessage()));
@@ -66,8 +66,7 @@ public class MainController implements IMainController, ISocketObserver, IWeight
 		}
 			break;
 		case D:			
-			
-			weightController.showMessagePrimaryDisplay(message.getMessage()); 
+			socketHandler.sendMessage(new SocketOutMessage(Weight.toString()+"\n\r"));
 			break;
 		case Q:
 			socketHandler.sendMessage(new SocketOutMessage("Closing..."));
@@ -78,6 +77,7 @@ public class MainController implements IMainController, ISocketObserver, IWeight
 		case RM208:
 			break;
 		case S:
+			socketHandler.sendMessage(new SocketOutMessage("S "+Weight.toString()+" kg\r\n"));
 			break;
 		case T:
 			break;
