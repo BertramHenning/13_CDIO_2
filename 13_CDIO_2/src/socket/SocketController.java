@@ -8,6 +8,8 @@ import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.HashSet;
 import java.util.Set;
+
+import controller.MainController;
 import socket.SocketInMessage.SocketMessageType;
 
 
@@ -57,7 +59,7 @@ public class SocketController implements ISocketController {
 			}		
 		} catch (IOException e1) {
 			// TODO Maybe notify MainController?
-//			MainController.class.notify();
+			MainController.class.notify();
 			e1.printStackTrace();
 		} 
 

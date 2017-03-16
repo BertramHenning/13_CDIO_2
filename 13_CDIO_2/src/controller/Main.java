@@ -16,9 +16,13 @@ public class Main {
 	public static void main(String[] args) {
 		
 		//If port needs to be changed from 8000
+		try{
 		if(args[0] != null){
 			arg = Integer.parseInt(args[0]);
 			SocketController.changePort(arg);
+		}
+		}catch(ArrayIndexOutOfBoundsException AE){
+			//DO nothing
 		}
 		
 		ISocketController socketHandler = new SocketController();

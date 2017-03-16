@@ -1,5 +1,7 @@
 package controller;
 
+import java.util.regex.Pattern;
+
 //import org.omg.Messaging.SyncScopeHelper;
 
 
@@ -26,6 +28,7 @@ public class MainController implements IMainController, ISocketObserver, IWeight
 	private Double weight = 0.0000;
 	private Double tara;
 	private Double totalWeight = 0.0000;
+	private String currDisplay = "";
 
 	public MainController(ISocketController socketHandler, IWeightInterfaceController weightInterfaceController) {
 		this.init(socketHandler, weightInterfaceController);
@@ -81,10 +84,15 @@ public class MainController implements IMainController, ISocketObserver, IWeight
 		case RM204:
 
 			weightController.showMessageSecondaryDisplay(message.getMessage());
-			
+			socketHandler.sendMessage(new SocketOutMessage("RM20 B\n\r"));
 			break;
 		case RM208:
 			weightController.showMessageSecondaryDisplay(message.getMessage());
+			socketHandler.sendMessage(new SocketOutMessage("RM20 B\n\r"));
+
+			
+			
+			
 			break;
 		case S:
 			socketHandler.sendMessage(new SocketOutMessage("S "+weight.toString()+" kg\r\n"));
@@ -151,12 +159,19 @@ public class MainController implements IMainController, ISocketObserver, IWeight
 		//TODO implement logic for handling input from ui
 		switch (keyPress.getType()) {
 		case SOFTBUTTON:
+			
 			System.out.println(keyPress.getCharacter() + " +- " + keyPress.getKeyNumber()+ "    " + keyPress.getType());
 			break;
 		case TARA:
+			
 			System.out.println(keyPress.getCharacter() + " +- " + keyPress.getKeyNumber());
 			break;
 		case TEXT:
+			int bogstav = keyPress.getCharacter();
+//			if(bogstav )
+			currDisplay += bogstav;
+			weightController.showMessagePrimaryDisplay(currDisplay);
+			
 			System.out.println(keyPress.getCharacter() + " +- " + keyPress.getKeyNumber());
 			break;
 		case ZERO:
@@ -170,9 +185,11 @@ public class MainController implements IMainController, ISocketObserver, IWeight
 			break;
 		case SEND:
 			System.out.println(keyPress.getCharacter() + " +- " + keyPress.getKeyNumber() + "    " + keyPress.getType());
+			
 			if (keyState.equals(KeyState.K4) || keyState.equals(KeyState.K3) ){
 				socketHandler.sendMessage(new SocketOutMessage("K A 3"));
 			}
+			
 			break;
 		}
 
