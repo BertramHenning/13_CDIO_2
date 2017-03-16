@@ -113,6 +113,9 @@ public class MainController implements IMainController, ISocketObserver, IWeight
 			}
 			weightController.showMessageSecondaryDisplay(message.getMessage()+"");
 			socketHandler.sendMessage(new SocketOutMessage("P111 A\n\r"));
+			
+			
+			
 			break;
 		case def:
 			socketHandler.sendMessage(new SocketOutMessage("ES\n\r"));
