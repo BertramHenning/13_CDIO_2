@@ -78,13 +78,12 @@ public class SocketController implements ISocketController {
 				System.out.println(inLine);
 				if (inLine==null) break;
 					if(inLine.contains("RM20")){
-						inLine = inLine.replace(" ", "");
+						inLine = inLine.replaceFirst(" ", "");
 					}
 				switch (inLine.split(" ")[0]) {
 				case "RM208": // Display a message in the secondary display and wait for response
 					//TODO implement logic for RM command
-					System.out.println("HERERM208");
-					notifyObservers(new SocketInMessage(SocketMessageType.RM208,""));
+					notifyObservers(new SocketInMessage(SocketMessageType.RM208, inLine.split(" ")[1]));
 					break;
 				case "RM204":
 					notifyObservers(new SocketInMessage(SocketMessageType.RM204, inLine.split(" ")[1]));
@@ -100,7 +99,8 @@ public class SocketController implements ISocketController {
 
 					break;
 				case "P111": //Show something in secondary display
-					notifyObservers(new SocketInMessage(SocketMessageType.P111, ""));
+					String temp = inLine.replaceFirst(" ", "_---_");
+					notifyObservers(new SocketInMessage(SocketMessageType.P111, temp.split("_---_")[1]));
 					break;
 				case "T": // Tare the weight
 

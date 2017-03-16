@@ -72,16 +72,19 @@ public class MainController implements IMainController, ISocketObserver, IWeight
 			break;
 		case D:			
 			weightController.showMessagePrimaryDisplay(message.getMessage()); 
-
+			socketHandler.sendMessage(new SocketOutMessage("D A\r\n"));
 			break;
 		case Q:
 			socketHandler.sendMessage(new SocketOutMessage("Closing..."));
 			System.exit(0);
 			break;
 		case RM204:
+
+			weightController.showMessageSecondaryDisplay(message.getMessage());
+			
 			break;
 		case RM208:
-			System.out.println("RM208");
+			weightController.showMessageSecondaryDisplay(message.getMessage());
 			break;
 		case S:
 			socketHandler.sendMessage(new SocketOutMessage("S "+weight.toString()+" kg\r\n"));
@@ -104,7 +107,12 @@ public class MainController implements IMainController, ISocketObserver, IWeight
 			handleKMessage(message);
 			break;
 		case P111:
-			socketHandler.sendMessage(new SocketOutMessage(weight.toString()+"\n\r"));
+			if(message.getMessage().length() > 30){
+				socketHandler.sendMessage(new SocketOutMessage("ES\r\n"));
+				break;
+			}
+			weightController.showMessageSecondaryDisplay(message.getMessage()+"");
+			socketHandler.sendMessage(new SocketOutMessage("P111 A\n\r"));
 			break;
 		case def:
 			socketHandler.sendMessage(new SocketOutMessage("ES\n\r"));
@@ -115,6 +123,7 @@ public class MainController implements IMainController, ISocketObserver, IWeight
 	}
 
 	private void handleKMessage(SocketInMessage message) {
+		System.out.println(message.getMessage());
 		switch (message.getMessage()) {
 		case "1" :
 			this.keyState = KeyState.K1;
@@ -139,7 +148,7 @@ public class MainController implements IMainController, ISocketObserver, IWeight
 		//TODO implement logic for handling input from ui
 		switch (keyPress.getType()) {
 		case SOFTBUTTON:
-			System.out.println(keyPress.getCharacter() + " +- " + keyPress.getKeyNumber());
+			System.out.println(keyPress.getCharacter() + " +- " + keyPress.getKeyNumber()+ "    " + keyPress.getType());
 			break;
 		case TARA:
 			System.out.println(keyPress.getCharacter() + " +- " + keyPress.getKeyNumber());
@@ -148,12 +157,16 @@ public class MainController implements IMainController, ISocketObserver, IWeight
 			System.out.println(keyPress.getCharacter() + " +- " + keyPress.getKeyNumber());
 			break;
 		case ZERO:
+			System.out.println(keyPress.getCharacter() + " +- " + keyPress.getKeyNumber());
 			break;
 		case C:
+			System.out.println(keyPress.getCharacter() + " +- " + keyPress.getKeyNumber());
 			break;
 		case EXIT:
+			System.out.println(keyPress.getCharacter() + " +- " + keyPress.getKeyNumber()+ "    " + keyPress.getType());
 			break;
 		case SEND:
+			System.out.println(keyPress.getCharacter() + " +- " + keyPress.getKeyNumber() + "    " + keyPress.getType());
 			if (keyState.equals(KeyState.K4) || keyState.equals(KeyState.K3) ){
 				socketHandler.sendMessage(new SocketOutMessage("K A 3"));
 			}
