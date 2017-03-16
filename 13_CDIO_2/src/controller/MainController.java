@@ -2,6 +2,7 @@ package controller;
 
 //import org.omg.Messaging.SyncScopeHelper;
 
+
 import com.sun.xml.internal.ws.resources.SenderMessages;
 
 import socket.ISocketController;
@@ -70,7 +71,7 @@ public class MainController implements IMainController, ISocketObserver, IWeight
 		}
 			break;
 		case D:			
-			socketHandler.sendMessage(new SocketOutMessage(Weight.toString()+"\n\r"));
+			socketHandler.sendMessage(new SocketOutMessage(weight.toString()+"\n\r"));
 			break;
 		case Q:
 			socketHandler.sendMessage(new SocketOutMessage("Closing..."));
@@ -81,7 +82,7 @@ public class MainController implements IMainController, ISocketObserver, IWeight
 		case RM208:
 			break;
 		case S:
-			socketHandler.sendMessage(new SocketOutMessage("S "+Weight.toString()+" kg\r\n"));
+			socketHandler.sendMessage(new SocketOutMessage("S "+weight.toString()+" kg\r\n"));
 			break;
 		case T:
 			tara = weight;
@@ -99,6 +100,7 @@ public class MainController implements IMainController, ISocketObserver, IWeight
 			handleKMessage(message);
 			break;
 		case P111:
+			socketHandler.sendMessage(new SocketOutMessage(weight.toString()+"\n\r"));
 			break;
 		case def:
 			socketHandler.sendMessage(new SocketOutMessage("ES\n\r"));
