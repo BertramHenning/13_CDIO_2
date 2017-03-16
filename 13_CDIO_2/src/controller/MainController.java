@@ -47,8 +47,6 @@ public class MainController implements IMainController, ISocketObserver, IWeight
 			//TODO set up weightController - Look above for inspiration (Keep it simple ;))
 			weightController.registerObserver(this);
 			new Thread(weightController).start();
-			
-
 		} else {
 			System.err.println("No controllers injected!");
 		}
@@ -87,21 +85,20 @@ public class MainController implements IMainController, ISocketObserver, IWeight
 			weightController.showMessageSecondaryDisplay(message.getMessage());
 			break;
 		case S:
-			socketHandler.sendMessage(new SocketOutMessage("S "+weight.toString()+" kg\r\n"));
+			socketHandler.sendMessage(new SocketOutMessage("S "+weight.toString()+" kg \r\n"));
 			break;
 		case T:
 			tara = weight;
 			weight = 0.0000;
 			String.format("Range = %.4f", weight);
 			weightController.showMessagePrimaryDisplay(weight + " kg");
-			
 			totalWeight = totalWeight + tara;
-			
-			socketHandler.sendMessage(new SocketOutMessage("T = " + tara + ". Total Weight " + totalWeight + "\r\n"));
+			socketHandler.sendMessage(new SocketOutMessage("T = " + tara + ". Total Weight = " + totalWeight + "\r\n"));
 			break;
 		case DW:
 			String.format("Range = %.4f", totalWeight);
 			weightController.showMessagePrimaryDisplay(totalWeight + " kg"); 
+			socketHandler.sendMessage(new SocketOutMessage("DW A \r\n"));
 			break;
 		case K:
 			handleKMessage(message);
@@ -112,13 +109,10 @@ public class MainController implements IMainController, ISocketObserver, IWeight
 				break;
 			}
 			weightController.showMessageSecondaryDisplay(message.getMessage()+"");
-			socketHandler.sendMessage(new SocketOutMessage("P111 A\n\r"));
-			
-			
-			
+			socketHandler.sendMessage(new SocketOutMessage("P111 A\r\n"));
 			break;
 		case def:
-			socketHandler.sendMessage(new SocketOutMessage("ES\n\r"));
+			socketHandler.sendMessage(new SocketOutMessage("ES\r\n"));
 			break;
 
 		}
