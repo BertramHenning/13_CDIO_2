@@ -1,6 +1,6 @@
 package controller;
 
-import org.omg.Messaging.SyncScopeHelper;
+//import org.omg.Messaging.SyncScopeHelper;
 
 import com.sun.xml.internal.ws.resources.SenderMessages;
 
@@ -58,23 +58,22 @@ public class MainController implements IMainController, ISocketObserver, IWeight
 	public void notify(SocketInMessage message) {
 		switch (message.getType()) {
 		case B:
-			
-				//Checking if command is valid.
-				if (checkDouble(message.getMessage())){
-					//Changing weight's screen to match new value.
-					weightController.showMessagePrimaryDisplay(message.getMessage());
-					this.notifyWeightChange(Double.parseDouble(message.getMessage()));
-					
-				} else{
-					// If command is not a double value ES will be returned.
-					socketHandler.sendMessage(new SocketOutMessage("ES"));
-			}
-			
+			//Checking if command is valid.
+			if (checkDouble(message.getMessage() )){
+				//Changing weight's screen to match new value.
+				weightController.showMessagePrimaryDisplay(message.getMessage());
+				this.notifyWeightChange(Double.parseDouble(message.getMessage()));
+				
+			} else{
+				// If command is not a double value ES will be returned.
+				socketHandler.sendMessage(new SocketOutMessage("ES\r\n"));
+		}
 			break;
 		case D:			
-			weightController.showMessagePrimaryDisplay(message.getMessage()); 
+			socketHandler.sendMessage(new SocketOutMessage(Weight.toString()+"\n\r"));
 			break;
 		case Q:
+			socketHandler.sendMessage(new SocketOutMessage("Closing..."));
 			System.exit(0);
 			break;
 		case RM204:
@@ -82,6 +81,7 @@ public class MainController implements IMainController, ISocketObserver, IWeight
 		case RM208:
 			break;
 		case S:
+			socketHandler.sendMessage(new SocketOutMessage("S "+Weight.toString()+" kg\r\n"));
 			break;
 		case T:
 			tara = weight;
@@ -100,6 +100,10 @@ public class MainController implements IMainController, ISocketObserver, IWeight
 			break;
 		case P111:
 			break;
+		case def:
+			socketHandler.sendMessage(new SocketOutMessage("ES\n\r"));
+			break;
+
 		}
 
 	}
@@ -119,7 +123,7 @@ public class MainController implements IMainController, ISocketObserver, IWeight
 			this.keyState = KeyState.K4;
 			break;
 		default:
-			socketHandler.sendMessage(new SocketOutMessage("ES"));
+			socketHandler.sendMessage(new SocketOutMessage("ES\n\r"));
 			break;
 		}
 	}
@@ -160,10 +164,12 @@ public class MainController implements IMainController, ISocketObserver, IWeight
 	
 	public boolean checkDouble(String str){
 		try{
-			Double.parseDouble(str);
-			return true;
+			if(Double.parseDouble(str) <= 6){
+				return true;
+			}
+			
+			return false;
 		}catch (NumberFormatException e){
-			socketHandler.sendMessage(new SocketOutMessage("Could not parse Double"));
 			return false;
 		}
 	}

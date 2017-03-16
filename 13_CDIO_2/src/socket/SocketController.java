@@ -8,8 +8,6 @@ import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.HashSet;
 import java.util.Set;
-
-import controller.MainController;
 import socket.SocketInMessage.SocketMessageType;
 
 
@@ -18,6 +16,7 @@ public class SocketController implements ISocketController {
 	//TODO Maybe add some way to keep track of multiple connections?
 	private BufferedReader inStream;
 	private DataOutputStream outStream;
+	private static int newPort = Port;
 
 
 	@Override
@@ -43,17 +42,22 @@ public class SocketController implements ISocketController {
 			System.out.println("Connection is closed. Message Not sent.");
 		}
 	}
+	
+	public static void changePort(int port){
+		newPort = port;
+	}
 
 	@Override
 	public void run() {
 		//TODO some logic for listening to a socket //(Using try with resources for auto-close of socket)
-		try (ServerSocket listeningSocket = new ServerSocket(Port)){ 
+		try (ServerSocket listeningSocket = new ServerSocket(newPort)){ 
+			System.out.println("Server running on port: "+newPort);
 			while (true){
 				waitForConnections(listeningSocket); 	
 			}		
 		} catch (IOException e1) {
 			// TODO Maybe notify MainController?
-			MainController.class.notify();
+//			MainController.class.notify();
 			e1.printStackTrace();
 		} 
 
@@ -111,7 +115,8 @@ public class SocketController implements ISocketController {
 					notifyObservers(new SocketInMessage(SocketMessageType.Q, "Shutting down..."));
 
 					break;
-				default: //Something went wrong?
+				default:
+					notifyObservers(new SocketInMessage(SocketMessageType.def, ""));
 					break;
 				}
 			}
@@ -126,6 +131,4 @@ public class SocketController implements ISocketController {
 			socketObserver.notify(message);
 		}
 	}
-
 }
-
