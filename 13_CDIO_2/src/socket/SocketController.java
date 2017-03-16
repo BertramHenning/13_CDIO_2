@@ -77,9 +77,17 @@ public class SocketController implements ISocketController {
 				inLine = inStream.readLine();
 				System.out.println(inLine);
 				if (inLine==null) break;
+					if(inLine.contains("RM20")){
+						inLine = inLine.replace(" ", "");
+					}
 				switch (inLine.split(" ")[0]) {
-				case "RM20": // Display a message in the secondary display and wait for response
+				case "RM208": // Display a message in the secondary display and wait for response
 					//TODO implement logic for RM command
+					System.out.println("HERERM208");
+					notifyObservers(new SocketInMessage(SocketMessageType.RM208,""));
+					break;
+				case "RM204":
+					notifyObservers(new SocketInMessage(SocketMessageType.RM204, inLine.split(" ")[1]));
 					break;
 				case "D":// Display a message in the primary display
 					//TODO Refactor to make sure that faulty messages doesn't break the system

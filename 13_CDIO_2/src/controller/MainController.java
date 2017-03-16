@@ -22,9 +22,9 @@ public class MainController implements IMainController, ISocketObserver, IWeight
 	private ISocketController socketHandler;
 	private IWeightInterfaceController weightController;
 	private KeyState keyState = KeyState.K1;
-	private Double weight = 3.0;
+	private Double weight = 0.0000;
 	private Double tara;
-	private Double totalWeight = 0.0;
+	private Double totalWeight = 0.0000;
 
 	public MainController(ISocketController socketHandler, IWeightInterfaceController weightInterfaceController) {
 		this.init(socketHandler, weightInterfaceController);
@@ -70,7 +70,7 @@ public class MainController implements IMainController, ISocketObserver, IWeight
 		}
 			break;
 		case D:			
-			socketHandler.sendMessage(new SocketOutMessage(Weight.toString()+"\n\r"));
+			weightController.showMessagePrimaryDisplay(message.getMessage()); 
 			break;
 		case Q:
 			socketHandler.sendMessage(new SocketOutMessage("Closing..."));
@@ -79,13 +79,15 @@ public class MainController implements IMainController, ISocketObserver, IWeight
 		case RM204:
 			break;
 		case RM208:
+			System.out.println("RM208");
 			break;
 		case S:
-			socketHandler.sendMessage(new SocketOutMessage("S "+Weight.toString()+" kg\r\n"));
+			socketHandler.sendMessage(new SocketOutMessage("S "+weight.toString()+" kg\r\n"));
 			break;
 		case T:
 			tara = weight;
-			weight = 0.0;
+			weight = 0.0000;
+			String.format("Range = %.4f", weight);
 			weightController.showMessagePrimaryDisplay(weight + " kg");
 			
 			totalWeight = totalWeight + tara;
@@ -93,7 +95,8 @@ public class MainController implements IMainController, ISocketObserver, IWeight
 			socketHandler.sendMessage(new SocketOutMessage("T = " + tara + ". Total Weight " + totalWeight + "\r\n"));
 			break;
 		case DW:
-			weightController.showMessagePrimaryDisplay(weight + " kg"); 
+			String.format("Range = %.4f", totalWeight);
+			weightController.showMessagePrimaryDisplay(totalWeight + " kg"); 
 			break;
 		case K:
 			handleKMessage(message);
