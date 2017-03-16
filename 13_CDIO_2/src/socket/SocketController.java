@@ -8,6 +8,8 @@ import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.HashSet;
 import java.util.Set;
+
+import controller.MainController;
 import socket.SocketInMessage.SocketMessageType;
 
 
@@ -57,7 +59,7 @@ public class SocketController implements ISocketController {
 			}		
 		} catch (IOException e1) {
 			// TODO Maybe notify MainController?
-//			MainController.class.notify();
+			MainController.class.notify();
 			e1.printStackTrace();
 		} 
 
@@ -73,6 +75,7 @@ public class SocketController implements ISocketController {
 			//.readLine is a blocking call 
 			//TODO How do you handle simultaneous input and output on socket?
 			//TODO this only allows for one open connection - how would you handle multiple connections?
+			
 			while (true){
 				inLine = inStream.readLine();
 				System.out.println(inLine);
@@ -93,25 +96,20 @@ public class SocketController implements ISocketController {
 					notifyObservers(new SocketInMessage(SocketMessageType.D, inLine.split(" ")[1])); 			
 					break;
 				case "DW": //Clear primary display
-
 					notifyObservers(new SocketInMessage(SocketMessageType.DW, " "));
-
-
 					break;
 				case "P111": //Show something in secondary display
 					String temp = inLine.replaceFirst(" ", "_---_");
 					notifyObservers(new SocketInMessage(SocketMessageType.P111, temp.split("_---_")[1]));
 					break;
 				case "T": // Tare the weight
-
 					notifyObservers(new SocketInMessage(SocketMessageType.T, inLine.split(" ")[0]));
-
 					break;
 				case "S": // Request the current load
 					notifyObservers(new SocketInMessage(SocketMessageType.S, ""));
 					break;
 				case "K":
-					if (inLine.split(" ").length>1){
+					if (inLine.split(" ").length > 1){
 						notifyObservers(new SocketInMessage(SocketMessageType.K, inLine.split(" ")[1]));
 					}
 					break;
@@ -119,9 +117,7 @@ public class SocketController implements ISocketController {
 					notifyObservers(new SocketInMessage(SocketMessageType.B, inLine.split(" ")[1]));
 					break;
 				case "Q": // Quit
-
 					notifyObservers(new SocketInMessage(SocketMessageType.Q, "Shutting down..."));
-
 					break;
 				default:
 					notifyObservers(new SocketInMessage(SocketMessageType.def, ""));
@@ -130,6 +126,7 @@ public class SocketController implements ISocketController {
 			}
 		} catch (IOException e) {
 			//TODO maybe notify mainController?
+			MainController.class.notify();
 			e.printStackTrace();
 		}
 	}
