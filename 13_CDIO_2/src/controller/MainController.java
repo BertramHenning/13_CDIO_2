@@ -72,6 +72,7 @@ public class MainController implements IMainController, ISocketObserver, IWeight
 				weightController.showMessagePrimaryDisplay(tempB);
 				System.out.println(tempB);
 				this.notifyWeightChange(Double.parseDouble(message.getMessage()));
+				socketHandler.sendMessage(new SocketOutMessage("B A"));
 				
 			} else{
 				// If command is not a double value ES will be returned.
@@ -111,9 +112,11 @@ public class MainController implements IMainController, ISocketObserver, IWeight
 			break;
 			
 		case S:
+
 			socketHandler.sendMessage(new SocketOutMessage("S "+
 					df.format(weight).toString().replace(",", ".")+
 					" kg\r\n"));
+			
 			
 			break;
 			
@@ -124,9 +127,12 @@ public class MainController implements IMainController, ISocketObserver, IWeight
 					df.format(weight).toString().replace(",", ".") + "kg");
 			
 			totalWeight = totalWeight + tara;
+
 			
 			socketHandler.sendMessage(new SocketOutMessage("T = " + tara + 
 					". Total Weight " + totalWeight + " kg\r\n"));
+
+
 			break;
 			
 		case DW:
