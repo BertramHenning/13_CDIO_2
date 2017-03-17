@@ -113,17 +113,10 @@ public class MainController implements IMainController, ISocketObserver, IWeight
 		case T:
 			tara = weight;
 			weight = 0.0000;
-			weightController.showMessagePrimaryDisplay(
-					df.format(weight).toString().replace(",", ".") + "kg");
-			
-			totalWeight = totalWeight + tara;
-
-			
+			weightController.showMessagePrimaryDisplay(df.format(weight).toString().replace(",", ".") + " kg");
 			socketHandler.sendMessage(new SocketOutMessage("T S " + tara + " kg\r\n"));
-
-
+			totalWeight = totalWeight + tara;			
 			break;
-			
 		case DW:
 			weightController.showMessagePrimaryDisplay(df.format(totalWeight)
 					.toString().replace(",", ".") + " kg"); 
@@ -249,18 +242,15 @@ public class MainController implements IMainController, ISocketObserver, IWeight
 		
 	}
 	
-	public boolean checkB(String str){
-		try{
-			if(Double.parseDouble(str) <= 6 &&
-					str.length() <= 6 &&
-					str.length() >= 1){
-				if(str.contains(".") &&
-						str.length() >= 3){					
-				return true;
-			}
+	public boolean checkB(String str) {
+		try {
+			if (Double.parseDouble(str) <= 6 && str.length() <= 6 && str.length() >= 1) {
+				if (str.contains(".") && str.length() >= 3) {
+					return true;
 				}
+			}
 			return false;
-		}catch(NumberFormatException e){
+		} catch (NumberFormatException e) {
 			return false;
 		}
 	}
