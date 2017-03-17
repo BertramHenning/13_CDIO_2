@@ -1,11 +1,10 @@
-package Main;
+package serverConnection;
 
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.net.Socket;
-import java.util.Scanner;
 
 
 public class ServerConnection{
@@ -16,7 +15,8 @@ public class ServerConnection{
     	Socket sock;
     	PrintWriter out = null;
     	BufferedReader in = null;
-    	    
+    	
+    	//Connects a socket to the weight
     	try {
     	   	sock = new Socket(hostName, portNumber);
             out = new PrintWriter(sock.getOutputStream(), true);
@@ -25,7 +25,7 @@ public class ServerConnection{
 			e.printStackTrace();
 		}
     	    
-    	String fromServer, fromUser = null;
+    	String fromServer;
     	    
     	try {
     		while(true){
@@ -33,6 +33,7 @@ public class ServerConnection{
     		fromServer = in.readLine();
     		System.out.println("Server: " + fromServer);
     		
+    		//Gets user ID
     		out.println("RM20 8 usernr?");
 			while ((fromServer = in.readLine()) != null) {
 			
@@ -50,6 +51,7 @@ public class ServerConnection{
 				}
 			}
 			
+			//Gets batch nr
 			out.println("RM20 8 batchnr?");
 			while ((fromServer = in.readLine()) != null) {
 			
@@ -67,6 +69,7 @@ public class ServerConnection{
 				}
 			}
 			
+			//Instructions for user
 			out.println("P111 Tøm vægten");
 			fromServer = in.readLine();
 			fromServer = in.readLine();
@@ -107,6 +110,7 @@ public class ServerConnection{
 			
 			System.out.println("brutto: " + brutto);
 			
+			//Check if weight was correctly used
 			if (brutto + tara + netto == 0){
 				out.println("P111 OK");
 			} else {
@@ -119,8 +123,7 @@ public class ServerConnection{
 			fromServer = in.readLine();
 			
     		}
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
+		} catch (Exception e) {
 			System.out.println("Vægt slukket");
 		}
     	

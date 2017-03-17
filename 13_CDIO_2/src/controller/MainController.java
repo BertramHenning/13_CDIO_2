@@ -27,10 +27,8 @@ public class MainController implements IMainController, ISocketObserver, IWeight
 	private IWeightInterfaceController weightController;
 	private KeyState keyState = KeyState.K1;
 	private Double weight = 0.0000;
-	private Double tara;
 	private Double totalWeight = 0.0000;
 	private String currDisplay = "";
-	private Boolean sent = false;
 	DecimalFormat df = new DecimalFormat("#0.0000");
 
 	public MainController(ISocketController socketHandler, IWeightInterfaceController weightInterfaceController) {
@@ -118,7 +116,7 @@ public class MainController implements IMainController, ISocketObserver, IWeight
 			weightController.showMessagePrimaryDisplay(weight + " kg");
 			break;
 		case DW:
-			weightController.showMessagePrimaryDisplay(df.format(totalWeight)
+			weightController.showMessagePrimaryDisplay(df.format(weight)
 					.toString().replace(",", ".") + " kg"); 
 			socketHandler.sendMessage(new SocketOutMessage("DW A \r\n"));
 			break;
@@ -177,21 +175,8 @@ public class MainController implements IMainController, ISocketObserver, IWeight
 			System.out.println(keyPress.getCharacter() + " +- " + keyPress.getKeyNumber()+ "    " + keyPress.getType());
 			break;
 		case TARA:
-			if(!currDisplay.matches(".*[a-z].*")){
-				weight = Double.parseDouble(currDisplay);
-				tara = weight;
-				weight = 0.0000;
-				weightController.showMessagePrimaryDisplay(weight + " kg");
-				totalWeight = totalWeight + tara;
-				weightController.showMessageSecondaryDisplay("T = " + tara + ". Total Weight = " + totalWeight);
-				currDisplay = "";
-			}
-			else{
-				weight = 0.0000;
-				weightController.showMessagePrimaryDisplay(weight + " kg");
-				socketHandler.sendMessage(new SocketOutMessage("ES\r\n"));
-				currDisplay = "";
-			}
+			weight = 0.0;
+			weightController.showMessagePrimaryDisplay(weight + " kg");
 			break;
 		case TEXT:
 			char bogstav = keyPress.getCharacter();
@@ -200,12 +185,15 @@ public class MainController implements IMainController, ISocketObserver, IWeight
 				weightController.showMessagePrimaryDisplay(currDisplay);
 			}
 			else {
-				weightController.showMessagePrimaryDisplay(currDisplay + " kg");
+				weightController.showMessagePrimaryDisplay(currDisplay + "");
 			}
 			System.out.println(keyPress.getCharacter() + " +- " + keyPress.getKeyNumber());
 			break;
 		case ZERO:
 			System.out.println(keyPress.getCharacter() + " +- " + keyPress.getKeyNumber());
+			weight = 0.0;
+			totalWeight = 0.0;
+			weightController.showMessagePrimaryDisplay(weight + " kg");
 			break;
 		case C:
 			currDisplay = "";
