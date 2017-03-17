@@ -72,7 +72,7 @@ public class MainController implements IMainController, ISocketObserver, IWeight
 				weightController.showMessagePrimaryDisplay(tempB);
 				System.out.println(tempB);
 				this.notifyWeightChange(Double.parseDouble(message.getMessage()));
-				socketHandler.sendMessage(new SocketOutMessage("B A"));
+				socketHandler.sendMessage(new SocketOutMessage("B A \r\n"));
 				
 			} else{
 				// If command is not a double value ES will be returned.
@@ -92,7 +92,7 @@ public class MainController implements IMainController, ISocketObserver, IWeight
 			
 		case RM204:
 			weightController.showMessageSecondaryDisplay(message.getMessage());
-			socketHandler.sendMessage(new SocketOutMessage("RM20 B\n\r"));
+			socketHandler.sendMessage(new SocketOutMessage("RM20 B\r\n"));
 			
 			
 			
@@ -100,7 +100,7 @@ public class MainController implements IMainController, ISocketObserver, IWeight
 			
 		case RM208:
 			weightController.showMessageSecondaryDisplay(message.getMessage());
-			socketHandler.sendMessage(new SocketOutMessage("RM20 B\n\r"));
+			socketHandler.sendMessage(new SocketOutMessage("RM20 B\r\n"));
 			
 			while(!sent){
 				if(KeyPress.Send().equals("SEND")){
@@ -112,12 +112,7 @@ public class MainController implements IMainController, ISocketObserver, IWeight
 			break;
 			
 		case S:
-
-			socketHandler.sendMessage(new SocketOutMessage("S "+
-					df.format(weight).toString().replace(",", ".")+
-					" kg\r\n"));
-			
-			
+			socketHandler.sendMessage(new SocketOutMessage("S S " + weight.toString()+" kg \r\n"));
 			break;
 			
 		case T:
@@ -129,8 +124,7 @@ public class MainController implements IMainController, ISocketObserver, IWeight
 			totalWeight = totalWeight + tara;
 
 			
-			socketHandler.sendMessage(new SocketOutMessage("T = " + tara + 
-					". Total Weight " + totalWeight + " kg\r\n"));
+			socketHandler.sendMessage(new SocketOutMessage("T S " + tara + " kg\r\n"));
 
 
 			break;
@@ -138,6 +132,7 @@ public class MainController implements IMainController, ISocketObserver, IWeight
 		case DW:
 			weightController.showMessagePrimaryDisplay(df.format(totalWeight)
 					.toString().replace(",", ".") + " kg"); 
+			socketHandler.sendMessage(new SocketOutMessage("DW A \r\n"));
 			break;
 			
 			
@@ -151,14 +146,14 @@ public class MainController implements IMainController, ISocketObserver, IWeight
 				break;
 			}
 			weightController.showMessageSecondaryDisplay(message.getMessage()+"");
-			socketHandler.sendMessage(new SocketOutMessage("P111 A\n\r"));
+			socketHandler.sendMessage(new SocketOutMessage("P111 A\r\n"));
 			
 			
 			
 			break;
 			
 		case def:
-			socketHandler.sendMessage(new SocketOutMessage("ES\n\r"));
+			socketHandler.sendMessage(new SocketOutMessage("ES\r\n"));
 			break;
 
 		}
