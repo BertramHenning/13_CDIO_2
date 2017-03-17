@@ -199,7 +199,8 @@ public class MainController implements IMainController, ISocketObserver, IWeight
 				weightController.showMessageSecondaryDisplay("T = " + tara + ". Total Weight = " + totalWeight);
 				currDisplay = "";
 				break;
-			}else{
+			}
+			else{
 				weight = 0.0000;
 				weightController.showMessagePrimaryDisplay(weight + " kg");
 				socketHandler.sendMessage(new SocketOutMessage("ES\r\n"));
