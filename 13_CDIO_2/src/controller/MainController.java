@@ -1,11 +1,12 @@
 package controller;
 
-import java.util.regex.Pattern;
+import java.text.DecimalFormat;
+//import java.util.regex.Pattern;
 
 //import org.omg.Messaging.SyncScopeHelper;
 
 
-import com.sun.xml.internal.ws.resources.SenderMessages;
+//import com.sun.xml.internal.ws.resources.SenderMessages;
 
 import socket.ISocketController;
 import socket.ISocketObserver;
@@ -29,6 +30,8 @@ public class MainController implements IMainController, ISocketObserver, IWeight
 	private Double tara;
 	private Double totalWeight = 0.0000;
 	private String currDisplay = "";
+	private Boolean sent = false;
+	DecimalFormat df = new DecimalFormat("#0.0000");
 
 	public MainController(ISocketController socketHandler, IWeightInterfaceController weightInterfaceController) {
 		this.init(socketHandler, weightInterfaceController);
@@ -50,6 +53,8 @@ public class MainController implements IMainController, ISocketObserver, IWeight
 			//TODO set up weightController - Look above for inspiration (Keep it simple ;))
 			weightController.registerObserver(this);
 			new Thread(weightController).start();
+			
+
 		} else {
 			System.err.println("No controllers injected!");
 		}
@@ -61,9 +66,11 @@ public class MainController implements IMainController, ISocketObserver, IWeight
 		switch (message.getType()) {
 		case B:
 			//Checking if command is valid.
-			if (checkDouble(message.getMessage() )){
+			if (checkB(message.getMessage())){
 				//Changing weight's screen to match new value.
-				weightController.showMessagePrimaryDisplay(message.getMessage());
+				String tempB = message.getMessage() + " kg";
+				weightController.showMessagePrimaryDisplay(tempB);
+				System.out.println(tempB);
 				this.notifyWeightChange(Double.parseDouble(message.getMessage()));
 				
 			} else{
@@ -71,56 +78,81 @@ public class MainController implements IMainController, ISocketObserver, IWeight
 				socketHandler.sendMessage(new SocketOutMessage("ES\r\n"));
 		}
 			break;
+			
 		case D:			
 			weightController.showMessagePrimaryDisplay(message.getMessage()); 
 			socketHandler.sendMessage(new SocketOutMessage("D A\r\n"));
 			break;
+			
 		case Q:
-			socketHandler.sendMessage(new SocketOutMessage("Closing..."));
+			socketHandler.sendMessage(new SocketOutMessage("Closing...\r\n"));
 			System.exit(0);
 			break;
+			
 		case RM204:
-
 			weightController.showMessageSecondaryDisplay(message.getMessage());
 			socketHandler.sendMessage(new SocketOutMessage("RM20 B\n\r"));
+			
+			
+			
 			break;
+			
 		case RM208:
 			weightController.showMessageSecondaryDisplay(message.getMessage());
 			socketHandler.sendMessage(new SocketOutMessage("RM20 B\n\r"));
-
 			
-			
+			while(!sent){
+				if(KeyPress.Send().equals("SEND")){
+					sent = true;
+				}
+				System.out.println("EXIt");
+			}
 			
 			break;
+			
 		case S:
-			socketHandler.sendMessage(new SocketOutMessage("S "+weight.toString()+" kg \r\n"));
+			socketHandler.sendMessage(new SocketOutMessage("S "+
+					df.format(weight).toString().replace(",", ".")+
+					" kg\r\n"));
+			
 			break;
+			
 		case T:
 			tara = weight;
 			weight = 0.0000;
-			String.format("Range = %.4f", weight);
-			weightController.showMessagePrimaryDisplay(weight + " kg");
+			weightController.showMessagePrimaryDisplay(
+					df.format(weight).toString().replace(",", ".") + "kg");
+			
 			totalWeight = totalWeight + tara;
-			socketHandler.sendMessage(new SocketOutMessage("T = " + tara + ". Total Weight = " + totalWeight + "\r\n"));
+			
+			socketHandler.sendMessage(new SocketOutMessage("T = " + tara + 
+					". Total Weight " + totalWeight + " kg\r\n"));
 			break;
+			
 		case DW:
-			String.format("Range = %.4f", totalWeight);
-			weightController.showMessagePrimaryDisplay(totalWeight + " kg"); 
-			socketHandler.sendMessage(new SocketOutMessage("DW A \r\n"));
+			weightController.showMessagePrimaryDisplay(df.format(totalWeight)
+					.toString().replace(",", ".") + " kg"); 
 			break;
+			
+			
 		case K:
 			handleKMessage(message);
 			break;
+			
 		case P111:
 			if(message.getMessage().length() > 30){
 				socketHandler.sendMessage(new SocketOutMessage("ES\r\n"));
 				break;
 			}
 			weightController.showMessageSecondaryDisplay(message.getMessage()+"");
-			socketHandler.sendMessage(new SocketOutMessage("P111 A\r\n"));
+			socketHandler.sendMessage(new SocketOutMessage("P111 A\n\r"));
+			
+			
+			
 			break;
+			
 		case def:
-			socketHandler.sendMessage(new SocketOutMessage("ES\r\n"));
+			socketHandler.sendMessage(new SocketOutMessage("ES\n\r"));
 			break;
 
 		}
@@ -157,11 +189,17 @@ public class MainController implements IMainController, ISocketObserver, IWeight
 			System.out.println(keyPress.getCharacter() + " +- " + keyPress.getKeyNumber()+ "    " + keyPress.getType());
 			break;
 		case TARA:
+			weight = Double.parseDouble(currDisplay);
+			tara = weight;
+			weight = 0.0000;
+			weightController.showMessagePrimaryDisplay(weight + " kg");
+			totalWeight = totalWeight + tara;
+			weightController.showMessageSecondaryDisplay("T = " + tara + ". Total Weight = " + totalWeight);
+			currDisplay = "";
 			
-			System.out.println(keyPress.getCharacter() + " +- " + keyPress.getKeyNumber());
 			break;
 		case TEXT:
-			int bogstav = keyPress.getCharacter();
+			char bogstav = keyPress.getCharacter();
 //			if(bogstav )
 			currDisplay += bogstav;
 			weightController.showMessagePrimaryDisplay(currDisplay);
@@ -172,7 +210,11 @@ public class MainController implements IMainController, ISocketObserver, IWeight
 			System.out.println(keyPress.getCharacter() + " +- " + keyPress.getKeyNumber());
 			break;
 		case C:
-			System.out.println(keyPress.getCharacter() + " +- " + keyPress.getKeyNumber());
+			currDisplay = "";
+			weightController.showMessagePrimaryDisplay(weight.toString());
+			weightController.showMessageSecondaryDisplay("");
+			
+			System.out.println(keyPress.getCharacter() + " +- " + keyPress.getKeyNumber()+ "    " + keyPress.getType());
 			break;
 		case EXIT:
 			System.out.println(keyPress.getCharacter() + " +- " + keyPress.getKeyNumber()+ "    " + keyPress.getType());
@@ -195,16 +237,22 @@ public class MainController implements IMainController, ISocketObserver, IWeight
 		weight = newWeight;
 	}
 	
-	public boolean checkDouble(String str){
+	public boolean checkB(String str){
 		try{
-			if(Double.parseDouble(str) <= 6){
+			if(Double.parseDouble(str) <= 6 &&
+					str.length() <= 6 &&
+					str.length() >= 1){
+				if(str.contains(".") &&
+						str.length() >= 3){					
 				return true;
 			}
-			
+				}
 			return false;
-		}catch (NumberFormatException e){
+		}catch(NumberFormatException e){
 			return false;
 		}
 	}
-
+	
+	
+	
 }

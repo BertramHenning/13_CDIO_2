@@ -14,6 +14,10 @@ public class KeyPress {
 		return new KeyPress(0,'\\', KeyPressType.EXIT);
 	}
 	
+	public static KeyPress C(){
+		return new KeyPress(0,'\\', KeyPressType.C);
+	}
+	
 	public static KeyPress Zero(){
 		return new KeyPress(0,'\\', KeyPressType.ZERO);
 	}
