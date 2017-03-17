@@ -65,6 +65,7 @@ public class MainController implements IMainController, ISocketObserver, IWeight
 				//Changing weight's screen to match new value.
 				weightController.showMessagePrimaryDisplay(message.getMessage());
 				this.notifyWeightChange(Double.parseDouble(message.getMessage()));
+				socketHandler.sendMessage(new SocketOutMessage("B A"));
 				
 			} else{
 				// If command is not a double value ES will be returned.
@@ -93,7 +94,7 @@ public class MainController implements IMainController, ISocketObserver, IWeight
 			
 			break;
 		case S:
-			socketHandler.sendMessage(new SocketOutMessage("S "+weight.toString()+" kg \r\n"));
+			socketHandler.sendMessage(new SocketOutMessage("S S " + weight.toString()+" kg \r\n"));
 			break;
 		case T:
 			tara = weight;
@@ -101,7 +102,7 @@ public class MainController implements IMainController, ISocketObserver, IWeight
 			String.format("Range = %.4f", weight);
 			weightController.showMessagePrimaryDisplay(weight + " kg");
 			totalWeight = totalWeight + tara;
-			socketHandler.sendMessage(new SocketOutMessage("T = " + tara + ". Total Weight = " + totalWeight + "\r\n"));
+			socketHandler.sendMessage(new SocketOutMessage("T S " + tara + ". Total weight " + totalWeight + "\r\n"));
 			break;
 		case DW:
 			String.format("Range = %.4f", totalWeight);

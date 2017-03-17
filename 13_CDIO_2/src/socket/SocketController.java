@@ -54,6 +54,7 @@ public class SocketController implements ISocketController {
 		//TODO some logic for listening to a socket //(Using try with resources for auto-close of socket)
 		try (ServerSocket listeningSocket = new ServerSocket(newPort)){ 
 			System.out.println("Server running on port: "+newPort);
+			
 			while (true){
 				waitForConnections(listeningSocket); 	
 			}		
@@ -137,3 +138,4 @@ public class SocketController implements ISocketController {
 		}
 	}
 }
+
