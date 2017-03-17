@@ -14,7 +14,7 @@ public class Main {
 		BufferedReader ServerIn;
 		DataOutputStream ServerOut;
 		String out, in;
-
+		
 		BufferedReader inFromUser = new BufferedReader(new InputStreamReader(System.in));
 		
 		try {
@@ -24,16 +24,14 @@ public class Main {
 				System.out.println("Connected");
 			ServerOut = new DataOutputStream(socket.getOutputStream());
 			ServerIn = new BufferedReader(new InputStreamReader(socket.getInputStream()));
-			out = inFromUser.readLine();
-			
+			out = inFromUser.readLine();			
 			ServerOut.writeBytes(out);
-			socket.close();			
+//			socket.close();			
 			
 		} catch (UnknownHostException e) {
 			System.out.println("Unable to connect to server with: \n"+e.toString());
 		} catch (IOException e) {
 			System.out.println("Unable to connect to server with: \n"+e.toString());
 		}
-		
 	}
 }
