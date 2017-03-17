@@ -30,7 +30,6 @@ public class MainController implements IMainController, ISocketObserver, IWeight
 	private Double tara;
 	private Double totalWeight = 0.0000;
 	private String currDisplay = "";
-	private Boolean sent = false;
 	DecimalFormat df = new DecimalFormat("#0.0000");
 
 	public MainController(ISocketController socketHandler, IWeightInterfaceController weightInterfaceController) {
