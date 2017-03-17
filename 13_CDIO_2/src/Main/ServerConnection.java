@@ -8,6 +8,7 @@ public class ServerConnection{
 	static int port;
     String message;
 	static String addr;
+	
     ServerConnection(){}
     void run()
     {
