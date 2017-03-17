@@ -41,7 +41,7 @@ public class ServerConnection{
 				
 				fromServer = in.readLine();
 				System.out.println("server: " + fromServer);
-				if(fromServer.equals("12")){
+				if(fromServer.split(" ")[2].equals("12")){
 					out.println("P111 Anders And?");
 					fromServer = in.readLine();
 					fromServer = in.readLine();
@@ -59,7 +59,7 @@ public class ServerConnection{
 				
 				fromServer = in.readLine();
 				System.out.println("server: " + fromServer);
-				if(fromServer.equals("1234")){
+				if(fromServer.split(" ")[2].equals("1234")){
 					out.println("P111 Salt?");
 					fromServer = in.readLine();
 					fromServer = in.readLine();

@@ -26,9 +26,10 @@ public class MainController implements IMainController, ISocketObserver, IWeight
 	private ISocketController socketHandler;
 	private IWeightInterfaceController weightController;
 	private KeyState keyState = KeyState.K1;
-	private Double weight = 0.0000;
-	private Double totalWeight = 0.0000;
+	private Double weight = 0.000;
+	private Double totalWeight = 0.000;
 	private String currDisplay = "";
+	private boolean rm20 = false;
 	DecimalFormat df = new DecimalFormat("#0.0000");
 
 	public MainController(ISocketController socketHandler, IWeightInterfaceController weightInterfaceController) {
@@ -101,6 +102,7 @@ public class MainController implements IMainController, ISocketObserver, IWeight
 			socketHandler.sendMessage(new SocketOutMessage("RM20 B\r\n"));
 			
 			currDisplay = "";
+			rm20 = true;
 			
 			break;
 			
@@ -175,31 +177,38 @@ public class MainController implements IMainController, ISocketObserver, IWeight
 			System.out.println(keyPress.getCharacter() + " +- " + keyPress.getKeyNumber()+ "    " + keyPress.getType());
 			break;
 		case TARA:
-			weight = 0.0;
-			weightController.showMessagePrimaryDisplay(weight + " kg");
+			if (!rm20) {
+				weight = 0.0;
+				weightController.showMessagePrimaryDisplay(weight + " kg");
+			}
+			System.out.println(keyPress.getCharacter() + " +- " + keyPress.getKeyNumber());
 			break;
 		case TEXT:
-			char bogstav = keyPress.getCharacter();
-			currDisplay += bogstav;
-			if (currDisplay.matches(".*[a-z].*")) {
-				weightController.showMessagePrimaryDisplay(currDisplay);
-			}
-			else {
-				weightController.showMessagePrimaryDisplay(currDisplay + "");
+			if (rm20) {
+				char bogstav = keyPress.getCharacter();
+				currDisplay += bogstav;
+				if (currDisplay.matches(".*[a-z].*")) {
+					weightController.showMessagePrimaryDisplay(currDisplay);
+				} else {
+					weightController.showMessagePrimaryDisplay(currDisplay + "");
+				}
 			}
 			System.out.println(keyPress.getCharacter() + " +- " + keyPress.getKeyNumber());
 			break;
 		case ZERO:
+			if (!rm20) {
+				weight = 0.0;
+				totalWeight = 0.0;
+				weightController.showMessagePrimaryDisplay(weight + " kg");
+			}
 			System.out.println(keyPress.getCharacter() + " +- " + keyPress.getKeyNumber());
-			weight = 0.0;
-			totalWeight = 0.0;
-			weightController.showMessagePrimaryDisplay(weight + " kg");
 			break;
 		case C:
-			currDisplay = "";
-			weightController.showMessagePrimaryDisplay(weight.toString());
-			weightController.showMessageSecondaryDisplay("");
-			
+			if (!rm20) {
+				currDisplay = "";
+				weightController.showMessagePrimaryDisplay(weight.toString());
+				weightController.showMessageSecondaryDisplay("");
+			}
 			System.out.println(keyPress.getCharacter() + " +- " + keyPress.getKeyNumber()+ "    " + keyPress.getType());
 			break;
 		case EXIT:
@@ -207,16 +216,21 @@ public class MainController implements IMainController, ISocketObserver, IWeight
 			System.exit(0);
 			break;
 		case SEND:
-			System.out.println(keyPress.getCharacter() + " +- " + keyPress.getKeyNumber() + "    " + keyPress.getType());
-			
-			if (keyState.equals(KeyState.K4) || keyState.equals(KeyState.K3) ){
-				socketHandler.sendMessage(new SocketOutMessage("K A 3"));
-			} else {
-				socketHandler.sendMessage(new SocketOutMessage(currDisplay + "\r\n"));
+			if (rm20) {
+				socketHandler.sendMessage(new SocketOutMessage("RM20 A "+ currDisplay + "\r\n"));
 				currDisplay = "";
+				weightController.showMessagePrimaryDisplay(df.format(weight).replace(",", ".") + " kg");
+				rm20 = false;
+			} else {
+
+				if (keyState.equals(KeyState.K4) || keyState.equals(KeyState.K3)) {
+					socketHandler.sendMessage(new SocketOutMessage("K A 3"));
+				} else {
+					socketHandler.sendMessage(new SocketOutMessage(" \r\n"));
+				}
+				weightController.showMessagePrimaryDisplay(weight + " kg");
 			}
-			weightController.showMessagePrimaryDisplay(weight + " kg");
-			
+			System.out.println(keyPress.getCharacter() + " +- " + keyPress.getKeyNumber() + "    " + keyPress.getType());
 			break;
 		}
 
@@ -224,11 +238,10 @@ public class MainController implements IMainController, ISocketObserver, IWeight
 
 	@Override
 	public void notifyWeightChange(double newWeight) {
-		
 		double temp = totalWeight - weight;
 		weight = newWeight - temp;
 		totalWeight = newWeight;
-		weightController.showMessagePrimaryDisplay(weight + " kg");
+		weightController.showMessagePrimaryDisplay(df.format(weight).replace(",", ".") + " kg");
 		
 	}
 	
