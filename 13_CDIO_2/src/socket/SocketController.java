@@ -84,6 +84,7 @@ public class SocketController implements ISocketController {
 					if(inLine.contains("RM20")){
 						inLine = inLine.replaceFirst(" ", "");
 					}
+					try{
 				switch (inLine.split(" ")[0]) {
 				case "RM208": // Display a message in the secondary display and wait for response
 					//TODO implement logic for RM command
@@ -124,6 +125,9 @@ public class SocketController implements ISocketController {
 					notifyObservers(new SocketInMessage(SocketMessageType.def, ""));
 					break;
 				}
+					}catch(ArrayIndexOutOfBoundsException AOBE){
+						sendMessage(new SocketOutMessage("ES\r\n"));
+					}
 			}
 		} catch (IOException e) {
 			//TODO maybe notify mainController?

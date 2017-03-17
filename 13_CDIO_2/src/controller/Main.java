@@ -10,7 +10,7 @@ import socket.ISocketController;
  *
  */
 public class Main {
-	private static boolean gui = true;
+//	private static boolean gui = true;
 	private static int arg;
 	
 	public static void main(String[] args) {
