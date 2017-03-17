@@ -102,12 +102,7 @@ public class MainController implements IMainController, ISocketObserver, IWeight
 			weightController.showMessageSecondaryDisplay(message.getMessage());
 			socketHandler.sendMessage(new SocketOutMessage("RM20 B\r\n"));
 			
-			while(!sent){
-				if(KeyPress.Send().equals("SEND")){
-					sent = true;
-				}
-				System.out.println("EXIT");
-			}
+			currDisplay = "";
 			
 			break;
 			
@@ -232,7 +227,11 @@ public class MainController implements IMainController, ISocketObserver, IWeight
 			
 			if (keyState.equals(KeyState.K4) || keyState.equals(KeyState.K3) ){
 				socketHandler.sendMessage(new SocketOutMessage("K A 3"));
+			} else {
+				socketHandler.sendMessage(new SocketOutMessage(currDisplay + "\r\n"));
+				currDisplay = "";
 			}
+			weightController.showMessagePrimaryDisplay(weight + " kg");
 			
 			break;
 		}
@@ -241,8 +240,10 @@ public class MainController implements IMainController, ISocketObserver, IWeight
 
 	@Override
 	public void notifyWeightChange(double newWeight) {
-		// TODO Auto-generated method stub
+		
 		weight = newWeight;
+		weightController.showMessagePrimaryDisplay(weight + " kg");
+		
 	}
 	
 	public boolean checkB(String str){
