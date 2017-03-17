@@ -26,7 +26,6 @@ public class Main {
 			ServerIn = new BufferedReader(new InputStreamReader(socket.getInputStream()));
 			out = inFromUser.readLine();			
 			ServerOut.writeBytes(out);
-		
 //			socket.close();			
 			
 		} catch (UnknownHostException e) {
