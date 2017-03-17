@@ -9,6 +9,7 @@ public class ServerConnection{
     String message;
 	static String addr;
 	
+	
     ServerConnection(){}
     void run()
     {
