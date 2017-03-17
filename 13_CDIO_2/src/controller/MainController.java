@@ -106,7 +106,7 @@ public class MainController implements IMainController, ISocketObserver, IWeight
 				if(KeyPress.Send().equals("SEND")){
 					sent = true;
 				}
-				System.out.println("EXIt");
+				System.out.println("EXIT");
 			}
 			
 			break;
@@ -190,18 +190,24 @@ public class MainController implements IMainController, ISocketObserver, IWeight
 			System.out.println(keyPress.getCharacter() + " +- " + keyPress.getKeyNumber()+ "    " + keyPress.getType());
 			break;
 		case TARA:
-			weight = Double.parseDouble(currDisplay);
-			tara = weight;
-			weight = 0.0000;
-			weightController.showMessagePrimaryDisplay(weight + " kg");
-			totalWeight = totalWeight + tara;
-			weightController.showMessageSecondaryDisplay("T = " + tara + ". Total Weight = " + totalWeight);
-			currDisplay = "";
-			
-			break;
+			if(!currDisplay.matches(".*[a-z].*")){
+				weight = Double.parseDouble(currDisplay);
+				tara = weight;
+				weight = 0.0000;
+				weightController.showMessagePrimaryDisplay(weight + " kg");
+				totalWeight = totalWeight + tara;
+				weightController.showMessageSecondaryDisplay("T = " + tara + ". Total Weight = " + totalWeight);
+				currDisplay = "";
+				break;
+			}
+			else{
+				weight = 0.0000;
+				weightController.showMessagePrimaryDisplay(weight + " kg");
+				socketHandler.sendMessage(new SocketOutMessage("ES\r\n"));
+				break;
+			}
 		case TEXT:
 			char bogstav = keyPress.getCharacter();
-//			if(bogstav )
 			currDisplay += bogstav;
 			weightController.showMessagePrimaryDisplay(currDisplay);
 			
@@ -219,6 +225,7 @@ public class MainController implements IMainController, ISocketObserver, IWeight
 			break;
 		case EXIT:
 			System.out.println(keyPress.getCharacter() + " +- " + keyPress.getKeyNumber()+ "    " + keyPress.getType());
+			System.exit(0);
 			break;
 		case SEND:
 			System.out.println(keyPress.getCharacter() + " +- " + keyPress.getKeyNumber() + "    " + keyPress.getType());
