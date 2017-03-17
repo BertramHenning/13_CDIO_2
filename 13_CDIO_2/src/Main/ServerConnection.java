@@ -28,6 +28,7 @@ public class ServerConnection{
     	String fromServer, fromUser = null;
     	    
     	try {
+    		while(true){
     		out.println("");
     		fromServer = in.readLine();
     		System.out.println("Server: " + fromServer);
@@ -40,7 +41,8 @@ public class ServerConnection{
 				fromServer = in.readLine();
 				System.out.println("server: " + fromServer);
 				if(fromServer.equals("12")){
-					out.println("P111 Anders?");
+					out.println("P111 Anders And?");
+					fromServer = in.readLine();
 					fromServer = in.readLine();
 					break;
 				} else{
@@ -56,7 +58,8 @@ public class ServerConnection{
 				fromServer = in.readLine();
 				System.out.println("server: " + fromServer);
 				if(fromServer.equals("1234")){
-					out.println("P111 Anders And?");
+					out.println("P111 Salt?");
+					fromServer = in.readLine();
 					fromServer = in.readLine();
 					break;
 				} else{
@@ -66,31 +69,61 @@ public class ServerConnection{
 			
 			out.println("P111 Tøm vægten");
 			fromServer = in.readLine();
+			fromServer = in.readLine();
 			
 			out.println("T");
 			fromServer = in.readLine();
 			
 			out.println("P111 Placer tara");
 			fromServer = in.readLine();
+			fromServer = in.readLine();
 			
-			System.out.println("yay");
+			out.println("T");
+			fromServer = in.readLine();
+			double tara = Double.parseDouble(fromServer.split(" ")[2]);
 			
+			System.out.println("tara: " + tara);
 			
-			while ((fromServer = in.readLine()) != null) {
-				
-				System.out.println("Server: " + fromServer);
-			    if (fromServer.equals("Bye.")){
-			        break;
-			    }
-			    in.readLine();
-			    out.println(fromUser);
-			    
+			out.println("P111 Placer netto");
+			fromServer = in.readLine();
+			fromServer = in.readLine();
+			
+			out.println("S");
+			fromServer = in.readLine();
+			double netto = Double.parseDouble(fromServer.split(" ")[2]);
+			
+			System.out.println("netto: " + netto);
+
+			out.println("T");
+			fromServer = in.readLine();
+			
+			out.println("P111 Fjern brutto");
+			fromServer = in.readLine();
+			fromServer = in.readLine();
+			
+			out.println("S");
+			fromServer = in.readLine();
+			double brutto = Double.parseDouble(fromServer.split(" ")[2]);
+			
+			System.out.println("brutto: " + brutto);
+			
+			if (brutto + tara + netto == 0){
+				out.println("P111 OK");
+			} else {
+				out.println("P111 Kasseret");
 			}
+			fromServer = in.readLine();
+			fromServer = in.readLine();
 			
+			out.println("T");
+			fromServer = in.readLine();
+			
+    		}
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
-			e.printStackTrace();
+			System.out.println("Vægt slukket");
 		}
+    	
     	
     	
     }

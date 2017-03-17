@@ -111,11 +111,11 @@ public class MainController implements IMainController, ISocketObserver, IWeight
 			break;
 			
 		case T:
-			tara = weight;
-			weight = 0.0000;
-			weightController.showMessagePrimaryDisplay(df.format(weight).toString().replace(",", ".") + " kg");
-			socketHandler.sendMessage(new SocketOutMessage("T S " + tara + " kg\r\n"));
-			totalWeight = totalWeight + tara;			
+
+			socketHandler.sendMessage(new SocketOutMessage("T S " + weight + " kg\r\n"));
+			
+			weight = 0.0;
+			weightController.showMessagePrimaryDisplay(weight + " kg");
 			break;
 		case DW:
 			weightController.showMessagePrimaryDisplay(df.format(totalWeight)
@@ -237,7 +237,9 @@ public class MainController implements IMainController, ISocketObserver, IWeight
 	@Override
 	public void notifyWeightChange(double newWeight) {
 		
-		weight = newWeight;
+		double temp = totalWeight - weight;
+		weight = newWeight - temp;
+		totalWeight = newWeight;
 		weightController.showMessagePrimaryDisplay(weight + " kg");
 		
 	}
